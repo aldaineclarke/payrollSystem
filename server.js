@@ -18,11 +18,9 @@ db.connect((error)=>{
     console.log("Connected to database")
 });
 
-// cors for development mode
-app.use(cors({
-    origin: ["https://localhost:4200","*"]
-}));
-
+// setting up view engine
+app.set('view engine', 'ejs');
+app.set("views", path.join(__dirname, '/views'));
 // setup the session configs
 app.use(session({
     secret: process.env.SECRET_KEY,
@@ -38,13 +36,14 @@ app.use(flash());
 
 app.use(express.json());
 app.use(express.urlencoded({extended:false}))
+app.use(express.static(path.join(__dirname,"/static/")))
 
 // In the production environment this will be used to load static files. 
 app.use(express.static(path.join(__dirname, "dist/*")));
 
 // ROUTES
 app.use("/", indexRouter);
-app.use("/admin/", adminRouter);
+app.use("/admin", adminRouter);
 
 app.listen(PORT,(error)=>{
     if(error){ throw error; }
