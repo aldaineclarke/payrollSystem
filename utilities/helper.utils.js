@@ -28,15 +28,33 @@ function getDateRange(startDate, endDate){
     if(endDate){
         endRange = parseDateToInputField(new Date(endDate));
     }
-    console.log("in getDateRange startRange: ", startRange);
-    console.log("in getDateRange endRange: ", endRange);
-
+   
     return {startRange, endRange}
+
+}
+
+/**
+ * @description Finds the starting of the week if the date isnt the starting then it will go back until the last Sunday.  
+ * @param {Date | Date-String} startDate Day of the week
+ * @returns {Object<{startDate, endDate}>} Object which contains the end date as well as the start date
+ */
+ function findStartWeek(startDate){
+    startDate = new Date(startDate);
+    while(true){
+
+        if(startDate.getDay() == 0){
+            let endDate = new Date(startDate);
+            endDate = new Date(endDate.setDate(endDate.getDate() + 7));
+            return {startDate, endDate};
+        }
+        startDate = new Date(startDate.setDate(startDate.getDate() - 1));
+    }
 
 }
 
 
 module.exports = {
     parseDateToInputField,
-    getDateRange
+    getDateRange,
+    findStartWeek,
 }
