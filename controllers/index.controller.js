@@ -31,6 +31,24 @@ class IndexController{
         })
 
     }
+    getTimecardForWeek(req, res, next){
+        let date = req.body.startRange;
+        let testDate = new Date(date);
+        console.log(testDate);
+        // while(true){
+        //     if (testDate.getDay() == 0){
+        //         console.log(testDate)
+        //         break;
+        //     }
+        // }
+        db.query("SELECT * FROM timecard where emp_id = ? AND loginTime >= ?", [req.session.emp_id, testDate],(error, results, fields)=>{
+
+            if(error) throw error;
+
+            return res.render({timecard: results})
+        });
+        
+    }
     startEmployeeClock(req, res, next){
 
         let {startRange, endRange } = getDateRange();
@@ -43,7 +61,6 @@ class IndexController{
         db.query("SELECT * FROM timecard WHERE emp_id = ? AND loginTime BETWEEN ? AND ? ",[req.session.user.emp_id, startRange, endRange ],(error,records, fields)=>{
             if(error) throw error;
             
-            console.log(records);
             if(records.length > 0){
                 req.flash("error", "An Entry was already made for the day. Please contact Manager");
                 return res.redirect("/")
@@ -75,18 +92,33 @@ class IndexController{
         if(!req.session.user){
             return res.redirect("/login")
         }
-        req.session.clockStarted = false;
+        let {startRange, endRange } = getDateRange();
+
+        let clockStarted = new Promise((resolve, reject) =>{
+            db.query("SELECT * FROM timecard  WHERE emp_id = ? AND ( loginTime BETWEEN ? AND ? ) AND (logoutTime IS NULL) ", [req.session.user.emp_id, startRange, endRange ], (error, results, fields)=>{
+            if(error) throw error;
+            
+            if(results.length <= 0){
+                resolve(false)
+            }else if(results.length == 1){
+                resolve(true)
+            }
+            resolve(results)
+
+        })
+        }).catch((error)=> {throw error})
+        
         let user_id = (req.session.user.emp_id);
         let timecard = await new Promise((resolve, reject)=>{
             db.query("SELECT * FROM timecard WHERE emp_id = ?",user_id, (error, results, fields)=>{
                 if(error){reject({message: error})}
                 return resolve(results);
-            })
+            });
 
             
         }).catch((error)=>{res.status(500).json(error)});
 
-        res.render("index",{timecard, user:req.session.user})
+        res.render("index",{timecard, user:req.session.user, clockStarted})
 
     }
     getPayrollInfo(req, res, next){
