@@ -7,12 +7,12 @@ router.get("/login",(req,res,next)=>{
     res.render("login",{title:"Login", messages:{error: res.locals.error_msg}})
 });
 router.get("/startClock",indexController.startEmployeeClock)
-router.get("/stopClock",indexController.startEmployeeClock)
+router.get("/stopClock",indexController.stopEmployeeClock)
 router.get("/",indexController.getUserInfo);
 
 router.post("/authenticate",indexController.loginUser);
 
-router.get("/logout",indexController.logoutUser)
+router.get("/logout",indexController.logoutUser);
 
 
 

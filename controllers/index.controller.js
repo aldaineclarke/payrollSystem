@@ -1,7 +1,7 @@
 const { request } = require("express");
 const res = require("express/lib/response");
 const db = require("../config/db.config");
-const { parseDateToInputField } = require("../utilities/helper.utils");
+const { parseDateToInputField, getDateRange } = require("../utilities/helper.utils");
 
 class IndexController{
 
@@ -32,30 +32,41 @@ class IndexController{
 
     }
     startEmployeeClock(req, res, next){
+
+        let {startRange, endRange } = getDateRange();
         let timecardInfo = {
             emp_id : parseInt(req.session.user.emp_id),
             // loginTime: new Date(),
             status : "Awaiting"
         }
         // login on timecard
-        db.query("INSERT INTO timecard SET ?", timecardInfo, (error, results, fields)=>{
+        db.query("SELECT * FROM timecard WHERE emp_id = ? AND loginTime BETWEEN ? AND ? ",[req.session.user.emp_id, startRange, endRange ],(error,records, fields)=>{
             if(error) throw error;
+            
+            console.log(records);
+            if(records.length > 0){
+                req.flash("error", "An Entry was already made for the day. Please contact Manager");
+                return res.redirect("/")
+            }else{
+                db.query("INSERT INTO timecard SET ?", timecardInfo, (error, results, fields)=>{
+                    if(error) throw error;
+                    res.redirect("/");
+                })
+            }
+            
         })
-        res.redirect("/");
+        
     }
     stopEmployeeClock(req, res, next){
         let emp_id =  parseInt(req.session.user.emp_id);
-        let startDate = parseDateToInputField(new Date());
-        let tomo = new Date().setDate(new Date().getDate() + 1)
-        let endDate = parseDateToInputField(new Date(tomo));
+        let {startRange, endRange } = getDateRange();
         let timecardInfo = {
             status : "Pending",
             logoutTime : new Date(),
         }
-        console.log(startDate)
-        console.log(endDate)
+
         // login on timecard
-        db.query("UPDATE timecard SET ? WHERE emp_id = ? AND loginTime BETWEEN ? AND ?", [timecardInfo, emp_id, startDate, endDate ], (error, results, fields)=>{
+        db.query("UPDATE timecard SET ? WHERE emp_id = ? AND loginTime BETWEEN ? AND ?", [timecardInfo, emp_id, startRange, endRange ], (error, results, fields)=>{
             if(error) throw error;
         })
         res.redirect("/");
