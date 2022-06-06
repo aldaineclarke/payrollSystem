@@ -11,18 +11,18 @@
 // )
 
 window.onload = () =>{
-    let startBtn = document.querySelector(".start");
-    let stopBtn = document.querySelector(".stop");
-    if(!localStorage.getItem("clockStarted")){
-        localStorage.setItem("clockStarted", "false");
-    }
-    if(localStorage.getItem("clockStarted") == "true"){
-        startBtn.classList.add("d-none");
-        stopBtn.classList.remove("d-none")
-    }else if(localStorage.getItem("clockStarted") == "false"){
-        startBtn.classList.remove("d-none");
-        stopBtn.classList.add("d-none");   
-    }
+    // let startBtn = document.querySelector(".start");
+    // let stopBtn = document.querySelector(".stop");
+    // if(!localStorage.getItem("clockStarted") || window.location.href == '/login'){
+    //     localStorage.setItem("clockStarted", "false");
+    // }
+    // if(localStorage.getItem("clockStarted") == "true"){
+    //     startBtn.classList.add("d-none");
+    //     stopBtn.classList.remove("d-none")
+    // }else if(localStorage.getItem("clockStarted") == "false"){
+    //     startBtn.classList.remove("d-none");
+    //     stopBtn.classList.add("d-none");   
+    // }
     // localStorage.setItem("clockStarted", "false");
     // let clockState = 'JSON.stringify(<%= user.name %>'
     // console.log(clockState);

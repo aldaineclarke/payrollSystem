@@ -8,12 +8,27 @@
                 
                 <div class="d-flex justify-content-between">
                     <h2><%= user.fname + ' ' + user.lname %></h2>
-                    <button type="button" onclick="startClock()" class="btn btn-primary  start">Start Clock</button>
-                    <button type="button" onclick="stopClock()" class="btn btn-danger stop">Stop Clock</button>
+                    <% if (!clockStarted) { %>
+                    <button type="button" onclick="startClock()" class="btn btn-primary  btn-sm start">Start Clock</button>
+                    <% }else { %>
+
+                    <button type="button" onclick="stopClock()" class="btn btn-danger btn-sm stop">Stop Clock</button>
+                    <% } %>
 
                 </div>
                 <p><span class="fw-bold">Email</span>: <%= user.email %></p>
                 <p><span class="fw-bold">ID</span>: <%= user.emp_id %></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <form action="/" method="GET">
+                    <label>
+                        <span>Work Week</span>
+                        <input type="date" name="startRange">
+                        <button class="btn btn-primary btn-sm">Search Date</button>
+                    </label>
+                </form>
             </div>
         </div>
         <div class="row">
@@ -40,6 +55,7 @@
         <table class="table align-middle mb-0 bg-white">
             <thead class="bg-light">
               <tr>
+                <th>WeekDay</th>
                 <th>Login Time</th>
                 <th>Logout Time</th>
                 <th>Hours Worked</th>
@@ -49,6 +65,9 @@
             <tbody>
                 <% timecard.forEach((log)=>{%>
               <tr>
+                <td>
+                    <p class="fw-normal"><%= new Date(log.loginTime).toLocaleString().slice(0,10) %></p>
+                </td>
                 <td>
                     <p class="fw-normal"><%= new Date(log.loginTime).toLocaleString().slice(11) %></p>
                 </td>
