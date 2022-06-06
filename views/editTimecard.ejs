@@ -1,0 +1,34 @@
+<%- include ('~header.ejs')%>
+
+    <section class="container">
+       <div class="row justify-content-center">
+           <div class="col-md-6">
+            <form action="/admin/updateTimecard/<%=timecard.id%>" method="POST" class="updateTimecardForm">
+                <legend>Update Employee Timecard</legend>
+                <div class="flex-col">
+                    <label disabled>
+                        <span>Employee ID</span>
+                        <input type="text" value="<%=timecard.emp_id%>" disabled>
+                    </label>
+                    <label>
+                        <span>Login Time: </span>
+                        <input type="datetime-local" class="my-form" value="<%= timecard.loginTime%>" name="loginTime">
+                    </label>
+                    <label>
+                        <span>Logout Time: </span>
+                        <input type="datetime-local" class="" name="logoutTime">
+                    </label>
+                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" name="status">
+                        <option value="Pending" selected>Pending</option>
+                        <option value="Awaiting">Awaiting</option>
+                        <option value="Approved">Approved</option>
+                      </select>
+                </div>
+                  <div>
+                      <button class="btn btn-primary">Update Timecard</button>
+                  </div>
+            </form>
+           </div>
+       </div> 
+    </section>
+<%- include ('~footer.ejs')%>
