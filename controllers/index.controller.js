@@ -1,7 +1,7 @@
-const { request } = require("express");
+
 const res = require("express/lib/response");
 const db = require("../config/db.config");
-const { parseDateToInputField, getDateRange } = require("../utilities/helper.utils");
+const { parseDateToInputField, getDateRange, findStartWeek } = require("../utilities/helper.utils");
 
 class IndexController{
 
@@ -32,20 +32,19 @@ class IndexController{
 
     }
     getTimecardForWeek(req, res, next){
-        let date = req.body.startRange;
-        let testDate = new Date(date);
-        console.log(testDate);
-        // while(true){
-        //     if (testDate.getDay() == 0){
-        //         console.log(testDate)
-        //         break;
-        //     }
-        // }
-        db.query("SELECT * FROM timecard where emp_id = ? AND loginTime >= ?", [req.session.emp_id, testDate],(error, results, fields)=>{
+        let date = req.params.startRange;
+        
+        let {startDate, endDate} = findStartWeek(date);
+        startDate = parseDateToInputField(startDate);
+        endDate = parseDateToInputField(endDate);
+        console.log("startDate: ", startDate); 
+        console.log("endDate: ", endDate)
+        db.query("SELECT * FROM timecard where emp_id = ? AND loginTime BETWEEN ? AND ? ", [req.session.user.emp_id, startDate, endDate],(error, results, fields)=>{
 
-            if(error) throw error;
+            console.log(results)
 
-            return res.render({timecard: results})
+            // if(error) throw error;
+            res.render("history", {timecard:results})
         });
         
     }
@@ -92,12 +91,23 @@ class IndexController{
         if(!req.session.user){
             return res.redirect("/login")
         }
+        let {startDate, endDate} = findStartWeek(new Date());
+
+        if(req.query.startRange){
+            let date = new Date(req.query.startRange);
+            ({startDate, endDate} = findStartWeek(date))
+        }
+        startDate = parseDateToInputField(startDate);
+        endDate = parseDateToInputField(endDate);
+
+
         let {startRange, endRange } = getDateRange();
 
-        let clockStarted = new Promise((resolve, reject) =>{
+
+        let clockStarted = await new Promise((resolve, reject) =>{
             db.query("SELECT * FROM timecard  WHERE emp_id = ? AND ( loginTime BETWEEN ? AND ? ) AND (logoutTime IS NULL) ", [req.session.user.emp_id, startRange, endRange ], (error, results, fields)=>{
             if(error) throw error;
-            
+
             if(results.length <= 0){
                 resolve(false)
             }else if(results.length == 1){
@@ -110,14 +120,15 @@ class IndexController{
         
         let user_id = (req.session.user.emp_id);
         let timecard = await new Promise((resolve, reject)=>{
-            db.query("SELECT * FROM timecard WHERE emp_id = ?",user_id, (error, results, fields)=>{
-                if(error){reject({message: error})}
-                return resolve(results);
+            db.query("SELECT * FROM timecard where emp_id = ? AND loginTime BETWEEN ? AND ? ", [user_id, startDate, endDate],(error, results, fields)=>{
+                if (error) throw error;
+    
+                resolve(results)
+    
             });
 
             
         }).catch((error)=>{res.status(500).json(error)});
-
         res.render("index",{timecard, user:req.session.user, clockStarted})
 
     }
