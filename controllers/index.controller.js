@@ -129,7 +129,7 @@ class IndexController{
 
             
         }).catch((error)=>{res.status(500).json(error)});
-        res.render("index",{timecard, user:req.session.user, clockStarted})
+        res.render("index",{timecard, user:req.session.user, clockStarted, startDate})
 
     }
     getPayrollInfo(req, res, next){

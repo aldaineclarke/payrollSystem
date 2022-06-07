@@ -11,11 +11,16 @@
 .h-custom > div{
     height: 100%;
 }
-.navbar-light .navbar-nav .nav-link.logoutBtn{
+.navbar-light .navbar-nav .nav-link.logoutBtn,.navbar-light .navbar-nav .nav-link{
     color: black;
+    /* margin-left: auto; */
 }
 .navbar-brand{
     font-weight: bold;
+}
+
+.navbar-nav{
+    flex: 1;
 }
 
 .updateTimecardForm{
@@ -110,7 +115,10 @@
 
 @media (min-width: 1024px){
     .navbar-collapse{
-        flex:0
+        flex:1
+    }
+    .navbar-light .navbar-nav .nav-link.logoutBtn{
+        margin-left: auto;
     }
 }
     

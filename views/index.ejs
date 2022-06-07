@@ -20,12 +20,12 @@
                 <p><span class="fw-bold">ID</span>: <%= user.emp_id %></p>
             </div>
         </div>
-        <div class="row">
+        <div class="row pt-2 pb-3">
             <div class="col">
                 <form action="/" method="GET">
                     <label>
-                        <span>Work Week</span>
-                        <input type="date" name="startRange">
+                        <span class="fw-bold">Work Week: </span>
+                        <input type="date" name="startRange" value ="<%= startDate %>" class="">
                         <button class="btn btn-primary btn-sm">Search Date</button>
                     </label>
                 </form>
@@ -79,8 +79,13 @@
                     (new Date(log.logoutTime) - 
                     new Date(log.loginTime) ) / 3600000).toFixed(2): "" %></td>
                 <td>
-                  <span class="badge badge-success rounded-pill d-inline"><%= log.status %></span>
+                    <span class="badge <%= (log.status == 'Pending') ? ' badge-warning ' : (log.status == 'Approved') ? ' badge-success ' : ' badge-danger ' %>rounded-pill d-inline"><%= log.status %></span>
+                        
+
+                        
                 </td>
+                        
+                  
                 <!-- <td>
                   <button type="button" class="btn btn-link btn-sm btn-rounded">
                     Edit
