@@ -1,5 +1,4 @@
 
-const res = require("express/lib/response");
 const db = require("../config/db.config");
 const { parseDateToInputField, getDateRange, findStartWeek } = require("../utilities/helper.utils");
 
@@ -87,6 +86,7 @@ class IndexController{
         })
         res.redirect("/");
     }
+    
     async getUserInfo(req, res, next){
         if(!req.session.user){
             return res.redirect("/login")

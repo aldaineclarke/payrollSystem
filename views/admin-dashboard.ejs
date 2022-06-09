@@ -16,7 +16,7 @@
               <% records.forEach((record)=>{ %>
                 <tr>
                     <td>
-                        <p class="fw-normal"><%= record.emp_id %></p>
+                        <a href="employee/<%= record.emp_id %>" class="fw-normal"><%= record.emp_id %></a>
                     </td>
                     <td>
                         <p class="fw-normal mb-1"><%= record.name %></p>
