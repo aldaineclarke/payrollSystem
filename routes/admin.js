@@ -1,5 +1,10 @@
 const router = require('express').Router();
 const adminController = require('../controllers/admin.controller');
+const employeeRouter = require("../routes/employee");
+
+
+router.use("/employee/", employeeRouter);
+
 
 router.get("/",adminController.getAllEmployees)
 router.post("/create",adminController.createEmployee);
