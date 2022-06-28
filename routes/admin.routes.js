@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const adminController = require('../controllers/admin.controller');
-const employeeRouter = require("../routes/employee");
+const employeeRouter = require("../routes/employee.routes");
 
 
 router.use("/employee/", employeeRouter);
