@@ -7,8 +7,8 @@ const path = require("path");
 const app = express();
 const PORT = parseInt(process.env.PORT) || 3000;
 const db = require("./config/db.config");
-const indexRouter = require("./routes/index");
-const adminRouter = require("./routes/admin");
+const indexRouter = require("./routes/index.routes");
+const adminRouter = require("./routes/admin.routes");
 
 
 // CONFIGURATIONS

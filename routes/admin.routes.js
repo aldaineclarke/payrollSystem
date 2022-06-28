@@ -3,7 +3,7 @@ const adminController = require('../controllers/admin.controller');
 const employeeRouter = require("../routes/employee.routes");
 
 
-router.use("/employee/", employeeRouter);
+router.use("/employees/", employeeRouter);
 
 
 router.get("/",adminController.getAllEmployees)

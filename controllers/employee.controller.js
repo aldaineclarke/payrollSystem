@@ -13,34 +13,43 @@ class EmployeeController{
         })
     }
     getEmployeeCreationForm(req, res, next){
-        res.render("employeeCreation");
+        db.query("SELECT * FROM departments", (error, results)=>{
+            if(error) console.log({code: error.code, message: error.sqlMessage});
+            res.render("employeeCreation", {departments: results});
+        });
     }
     createEmployee(req, res, next){
-        
+    
+
+        let password = (req.body.fname).slice(0,1);
+        console.log(password)
         let addressData = {
             line_1 : req.body.addressLine1,
             line_2 : req.body.addressLine2,
             parish : req.body.parish
         }
-        db.query("INSERT INTO address SET ?",[addressData], (error, addressResult, next)=>{
 
+         db.query("INSERT INTO address SET ?",[addressData], (error, addressResult, next)=>{
 
-            let data = {
-                fname: req.body.fname,
-                lname: req.body.lname,
-                username: req.body.username,
-                email: req.body.email,
-                password: (req.body.fname).slice(0,1).concat(req.body.lname).toUpperCase(),
-                is_admin: req.body.setAdmin,
-                address_id: addressResult.insertId
-            }
+             if(error) throw error;
+             let password = (req.body.fname).slice(0,1);
+            password = password.concat(".",req.body.lname).replace(" ","-").toUpperCase();
+             let data = {
+                 fname: req.body.fname,
+                 lname: req.body.lname,
+                 username: req.body.username,
+                 email: req.body.email,
+                 department_id: req.body.department,
+                 password: password,
+                 is_admin: (req.body.setAdmin) ? true : false,
+                 address_id: addressResult.insertId
+             }
 
-            db.query("INSERT INTO employee SET ?", [data], (error, results, fields)=>{
-                if(error) throw error;
-                return redirect("/admin/");
-    
-            });
-        })
+             db.query("INSERT INTO employees SET ?", [data], (error, results, fields)=>{
+                 if(error) throw error;
+                 return res.redirect("/admin/employees/");
+             });
+         })
         
 
     }
@@ -54,12 +63,15 @@ class EmployeeController{
         })
         res.render()
     }
-    getEmployee(req, res, next){
-
+    getAllEmployees(req, res, next){
+        db.query("SELECT e.emp_id, e.fname,e.lname, e.email, d.department FROM employees e JOIN departments d ON d.id = e.department_id", (error, results)=>{
+            if(error) console.log({code: error.code, message: error.sqlMessage});
+            res.render("viewEmployees", {employees:results});
+        })
     }
-    getEmployee(req, res, next){
+    // getEmployee(req, res, next){
 
-    }
+    // }
 
 }
 module.exports = new EmployeeController()
