@@ -1,0 +1,48 @@
+
+    <%- include('~header.ejs') %>
+
+    <section class="container">
+        <div class="row">
+            <div class="col">
+                <h2>Current Employees</h2>
+                <table class="table align-middle mb-0 bg-white">
+                    <thead class="bg-light">
+                    <tr>
+                        <th>Employee ID</th>
+                        <th>Employee Name</th>
+                        <th>Email</th>
+                        <th>Department</th>
+                        <th>Actions</th>
+                        
+                        
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <% employees.forEach((employee)=>{%>
+                    <tr>
+                        <td>
+                            <p class="fw-normal"><%= employee.emp_id%></p>
+                        </td>
+                        <td>
+                            <p class="fw-normal"><%= employee.fname.concat(' ', employee.lname) %></p>
+                        </td>
+                        <td>
+                        <p class="fw-normal"><%= employee.email %></p>
+
+                        </td>
+                        <td><%= employee.department %></td>
+                        <td>
+                            <a href="/employees/detail/<%= employee.emp_id%>">More Detail</a>
+                        </td>
+                                
+                    </tr>
+                    <% }) %>
+                    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+
+<%- include('~footer.ejs') %>
