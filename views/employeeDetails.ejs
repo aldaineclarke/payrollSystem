@@ -1,0 +1,137 @@
+<%- include ('~header.ejs')%>
+
+    <section class="container" onloadstart="disableFields();">
+       <div class="row mt-4">
+           <div class="col d-flex align-items-center">
+                <h1 class="text-center">Employee Information</h1>
+                <a href="/admin/employees/delete/<%= employeeInfo.emp_id %>" class="btn btn-danger btn-sm ms-auto">Delete Employee</a>
+
+           </div>
+       </div> 
+       <div class="row">
+        <div class="col-4 flex-col">
+            <div class="profile-img">
+                <img src="/IMG/profile-photos-4.webp" alt="Image of employee">
+            </div>
+
+        </div>
+        <div class="col-8 border-start">
+            <form action="/admin/employees/details/<%= employeeInfo.emp_id %>" method="POST">
+            <div class="row gx-6 mt-4">
+                <div class="col">
+                    <h3>Personal Information</h3>
+                    <div class="row mt-4">
+                        <label>
+                            <span>First Name: </span>
+                            <input type="text" value="<%= employeeInfo.fname %>" class="disabled form-control" name="fname">
+                        </label>
+
+                        <label>
+                            <span>Last Name: </span>
+                            <input type="text" value="<%= employeeInfo.lname %>" class="disabled form-control" name="lname">
+                        </label>
+                        <label>
+                            <span>Email: </span>
+                            <input type="email" value="<%= employeeInfo.email %>" class="disabled form-control" name="email">
+                        </label>
+                        <label>
+                            <span>Username: </span>
+                            <input type="text" value="<%= employeeInfo.username %>" class="disabled form-control" name="username">
+                        </label>
+                    </div>
+                </div>
+                <div class="col">
+                    <h3>Address Information</h3>
+                    <div class="row  mt-4">
+                        <input type="hidden" class="disabled" name="address_id" value="<%= employeeInfo.address_id %>"/>
+                        <label>
+                            <span>Address Line 1: </span> 
+                            <input type="text" class="form-control disabled" value="<%= employeeInfo.line_1 %>" name="addressLine1">
+                        </label>
+                        <label>
+                            <span>Address Line 2: </span> 
+                            <input type="text" class="form-control disabled" value="<%= employeeInfo.line_2 %>" name="addressLine2">
+                        </label>
+                        <label>
+                            <span>Parish: </span> 
+                            <input type="text" class="form-control disabled" value="<%= employeeInfo.parish %>" name="parish">
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row mt-3">
+                <div class="col">
+                    <h2>Account Info</h2>
+                    <div class="row mt-2">
+                        <div class="col">
+                            <div class="row">
+                               
+                                <label>
+                                    <span>Password: </span>
+                                    <input type="password" class="form-control disabled" value="<%= employeeInfo.password %>" name="password">
+                                </label>
+                                <label>
+                                    <span>Confirm Password: </span>
+                                    <input type="password" class="form-control disabled" value="<%= employeeInfo.password %>" name="password2">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="row">
+                                <label>
+                                    <%= employeeInfo.department%>
+                                    <span>Department: </span>
+                                    <select class="form-select disabled" name="department">
+                                        <% allDepartments.forEach((department)=>{ %>
+                                            <% if(department.department === employeeInfo.department){ %>
+                                                <option value="<%= department.id %>" selected><%= department.department %></option>
+                                           <% }else{ %>
+                                                <option value="<%= department.id %>"><%= department.department %></option>
+                                            <%}%>
+                                        <% })%>
+                                    </select>
+                                </label>
+                                <div class="form-check mt-3 ms-3">
+                                    <% if(employeeInfo.is_admin){%>
+                                        <input class="form-check-input disabled" type="checkbox" name="setAdmin" id="flexRadioDefault1" checked>
+                                    <%}else{%>
+                                        <input class="form-check-input disabled" type="checkbox" name="setAdmin" id="flexRadioDefault1">
+                                    <%}%>
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                      Set to Admin
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                
+            </div>
+            <div class="row mt-3">
+
+                    <div class="col cta-align-right">
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="enableFields()">Edit Employee</button>
+                        <button type="submit" class="btn btn-success btn-sm">Update Employee</button>
+                    </div>
+            </div>
+            </form>
+        </div>
+       </div>
+    </section>
+
+    <script>
+        
+        console.log(document.querySelectorAll(".disabled"));
+        document.querySelectorAll(".disabled").forEach((element)=>{
+            element.setAttribute("disabled", "");
+        })
+        
+        function enableFields(){
+            document.querySelectorAll(".disabled").forEach((element)=>{
+                element.removeAttribute("disabled");
+            })
+        }
+    </script>
+<%- include ('~footer.ejs')%>

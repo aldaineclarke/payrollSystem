@@ -4,9 +4,10 @@ class EmployeeController{
 
     getEmployee(req, res, next){
         let emp_id = parseInt(req.params.id);
-        db.query("SELECT e.fname, e.lname, e.email, e.username, e.password, a.line_1, a.line_2, a.parish, d.department FROM employees e JOIN departments d ON e.department_id = d.id JOIN addresses a ON e.address_id = a.id WHERE emp_id = ?", [emp_id], (error, results, fields)=>{
+        db.query("SELECT e.emp_id, e.address_id, e.fname, e.lname, e.email, e.username, e.is_admin, e.password, a.line_1, a.line_2, a.parish, d.department FROM employees e JOIN departments d ON e.department_id = d.id JOIN addresses a ON e.address_id = a.id WHERE emp_id = ?", [emp_id], (error, results, fields)=>{
             if(error) console.log({code: error.code, message: error.sqlMessage});
             if(results.length <= 0){
+                console.log(results)
                 return res.redirect("/admin/employees")
             }
 
@@ -21,11 +22,41 @@ class EmployeeController{
             res.render("employeeCreation", {departments: results});
         });
     }
+
+    updateEmployee(req, res, next){
+        console.log(req.body);
+        if(Object.keys(req.body).length === 0){
+            return res.redirect("/admin/employees");
+        }
+        let addressData = {
+            line_1 : req.body.addressLine1,
+            line_2 : req.body.addressLine2,
+            parish : req.body.parish
+        }
+        let address_id = parseInt(req.body.address_id);
+        db.query("UPDATE addresses SET ? WHERE id = ?",[addressData,address_id], (error, addressResult, next)=>{
+
+            if(error) return console.log({code:error.code, message:error.sqlMessage});
+            let data = {
+                fname: req.body.fname,
+                lname: req.body.lname,
+                username: req.body.username,
+                email: req.body.email,
+                department_id: req.body.department,
+                password: req.body.password,
+                is_admin: (req.body.setAdmin) ? true : false,
+                address_id: address_id
+            }
+            db.query("UPDATE employees SET ? WHERE emp_id = ?", [data, parseInt(req.params.id)], (error, results, fields)=>{
+                if(error) throw error;
+                return res.redirect("/admin/employees/");
+            });
+        })
+
+    }
     createEmployee(req, res, next){
     
 
-        let password = (req.body.fname).slice(0,1);
-        console.log(password)
         let addressData = {
             line_1 : req.body.addressLine1,
             line_2 : req.body.addressLine2,
@@ -56,11 +87,20 @@ class EmployeeController{
         
 
     }
+    deleteEmployee(req, res, next){
+        let id = parseInt(req.params.emp_id);
+
+        db.query("DELETE FROM employees WHERE emp_id = ?",[id], (error, results)=>{
+            if(error) console.log({code: error.code, message: error.sqlMessage});
+            res.redirect("/admin/employees");
+        })
+    }
+
     getEditEmployeeForm(req, res, next){
         let emp_id = req.params.id;
         db.query("SELECT * FROM employees WHERE emp_id = ?", [emp_id], (error, results,field)=>{
             if(error) throw error;
-            res.render("employeeCreation") 
+            res.render("employeeCreation");
 
 
         })
