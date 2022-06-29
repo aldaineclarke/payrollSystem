@@ -16,6 +16,15 @@
     justify-content: flex-end;
     gap: 1rem;
 }
+.flex-form{
+    display: flex;
+    gap: 5px;
+    justify-content: start;
+    align-items:center;
+}
+.flex-form .form-control{
+    width: initial;
+}
 .h-custom{
     position:absolute;
     z-index: 99;
