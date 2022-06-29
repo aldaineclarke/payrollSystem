@@ -13,7 +13,8 @@ router.get("/",indexController.getUserInfo);
 router.post("/authenticate",indexController.loginUser);
 
 router.get("/logout",indexController.logoutUser);
-
+router.get("/profile", authGuard,indexController.getEmployeeProfile);
+router.post("/profile", authGuard,indexController.updateEmployeeInfo);
 
 
 module.exports = router;

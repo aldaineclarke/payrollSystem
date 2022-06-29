@@ -3,7 +3,25 @@ const db = require("../config/db.config");
 const { parseDateToInputField, getDateRange, findStartWeek } = require("../utilities/helper.utils");
 
 class IndexController{
+    getEmployeeProfile(req, res, next){
+        let emp_id = parseInt(req.session.user.emp_id);
+        db.query("SELECT e.emp_id, e.address_id, e.fname, e.lname, e.email, e.username, e.is_admin, e.password, a.line_1, a.line_2, a.parish, d.department FROM employees e JOIN departments d ON e.department_id = d.id JOIN addresses a ON e.address_id = a.id WHERE emp_id = ?", [emp_id], (error, results, fields)=>{
+            if(error) console.log({code: error.code, message: error.sqlMessage});
+            if(results.length <= 0){
+                console.log(results)
+                return res.redirect("/");
+            }   
+            console.log(results)
 
+            db.query("SELECT * FROM departments", (error, departments)=>{
+                return res.render("employee-profile", {employeeInfo:results[0], allDepartments: departments})
+            })
+        })
+    }
+
+    updateEmployeeInfo(req, res, next){
+
+    }
     async loginUser(req, res, next){
         let password = req.body.password;
         let email = req.body.email;
