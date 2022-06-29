@@ -1,4 +1,21 @@
+.profile-img{
+    width: 100%;
+    text-align:center;
+}
 
+.profile-img img{
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 50%;
+}
+
+.cta-align-right{
+    display:flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
 .h-custom{
     position:absolute;
     z-index: 99;

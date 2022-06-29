@@ -3,13 +3,16 @@ const db = require("../config/db.config");
 class EmployeeController{
 
     getEmployee(req, res, next){
-        let emp_id = req.params.id;
-        db.query("SELECT * FROM employee WHERE emp_id = ?", emp_id, (error, results, fields)=>{
-            if(error) throw error;
+        let emp_id = parseInt(req.params.id);
+        db.query("SELECT e.fname, e.lname, e.email, e.username, e.password, a.line_1, a.line_2, a.parish, d.department FROM employees e JOIN departments d ON e.department_id = d.id JOIN addresses a ON e.address_id = a.id WHERE emp_id = ?", [emp_id], (error, results, fields)=>{
+            if(error) console.log({code: error.code, message: error.sqlMessage});
             if(results.length <= 0){
-                return res.render("")
+                return res.redirect("/admin/employees")
             }
-            return res.render("employeeDetail", {employee: results[0]})
+
+            db.query("SELECT * FROM departments", (error, departments)=>{
+                return res.render("employeeDetails", {employeeInfo:results[0], allDepartments: departments})
+            })
         })
     }
     getEmployeeCreationForm(req, res, next){
@@ -29,7 +32,7 @@ class EmployeeController{
             parish : req.body.parish
         }
 
-         db.query("INSERT INTO address SET ?",[addressData], (error, addressResult, next)=>{
+         db.query("INSERT INTO addresses SET ?",[addressData], (error, addressResult, next)=>{
 
              if(error) throw error;
              let password = (req.body.fname).slice(0,1);
@@ -55,7 +58,7 @@ class EmployeeController{
     }
     getEditEmployeeForm(req, res, next){
         let emp_id = req.params.id;
-        db.query("SELECT * FROM employee WHERE emp_id = ?", [emp_id], (error, results,field)=>{
+        db.query("SELECT * FROM employees WHERE emp_id = ?", [emp_id], (error, results,field)=>{
             if(error) throw error;
             res.render("employeeCreation") 
 

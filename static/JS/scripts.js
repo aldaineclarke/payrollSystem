@@ -49,3 +49,15 @@ function getToEditPage(event){
     let recordId = button.getAttribute("data-id");
     window.location.href  = "/admin/updateTimecard/"+ recordId;
 }
+
+function disableFields(){
+    console.log(document.querySelectorAll(".disabled"));
+    document.querySelectorAll(".disabled").forEach((element)=>{
+        element.setAttribute("disabled", "");
+    })
+}
+function enableFields(){
+    document.querySelectorAll(".disabled").forEach((element)=>{
+        element.removeAttribute("disabled");
+    })
+}
