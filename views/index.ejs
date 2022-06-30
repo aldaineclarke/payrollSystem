@@ -6,10 +6,10 @@
         <div class="row">
             <div class="col emp-info">
                 
-                <div class="d-flex justify-content-between">
+                <div class="d-flex justify-content-between align-items-center">
                     <h2><%= user.fname + ' ' + user.lname %></h2>
                     <% if (!clockStarted) { %>
-                    <button type="button" onclick="startClock()" class="btn btn-primary  btn-sm start">Start Clock</button>
+                    <button type="button" onclick="startClock()" class="btn btn-primary btn-sm start">Start Clock</button>
                     <% }else { %>
 
                     <button type="button" onclick="stopClock()" class="btn btn-danger btn-sm stop">Stop Clock</button>

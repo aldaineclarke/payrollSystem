@@ -88,7 +88,7 @@ class EmployeeController{
 
     }
     deleteEmployee(req, res, next){
-        let id = parseInt(req.params.emp_id);
+        let id = parseInt(req.params.id);
 
         db.query("DELETE FROM employees WHERE emp_id = ?",[id], (error, results)=>{
             if(error) console.log({code: error.code, message: error.sqlMessage});
