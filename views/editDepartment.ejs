@@ -1,0 +1,30 @@
+<%- include ('~header.ejs')%>
+
+    <section class="container">
+       <div class="row justify-content-center mt-4">
+           <div class="col-md-6">
+            <form action="/admin/departments/<%= department.id %>" method="POST" class="">
+                <legend>Update Department</legend>
+                <div class="flex-col">
+                    <label>
+                        <span>Department Name</span>
+                        <input type="text" name="department" class="form-control" value="<%= department.department %>">
+                    </label>
+                    <label>
+                        <span>Base Rate</span>
+                        <input type="number" name="baseRate" class="form-control" value="<%= department.base_rate %>"/>
+                    </label>
+                    <label>
+                        <span>Overtime Rate</span>
+                        <input type="number" name="overtime" class="form-control" value="<%= department.overtime_rate %>">
+                    </label>
+                    
+                </div>
+                <div class="mt-4">
+                    <button class="btn btn-primary">Update Department</button>
+                </div>
+            </form>
+           </div>
+       </div> 
+    </section>
+<%- include ('~footer.ejs')%>
