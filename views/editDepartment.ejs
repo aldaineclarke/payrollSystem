@@ -1,6 +1,12 @@
 <%- include ('~header.ejs')%>
 
     <section class="container">
+        <div class="row mt-4">
+            <div class="col d-flex justify-content-between align-items-center">
+                <h1><%=department.department%></h1> 
+                <a href="/admin/departments/delete/<%= department.id %>" class="btn btn-sm btn-danger">Remove Department</a>
+            </div>
+        </div>
        <div class="row justify-content-center mt-4">
            <div class="col-md-6">
             <form action="/admin/departments/<%= department.id %>" method="POST" class="">
@@ -12,11 +18,11 @@
                     </label>
                     <label>
                         <span>Base Rate</span>
-                        <input type="number" name="baseRate" class="form-control" value="<%= department.base_rate %>"/>
+                        <input type="number" name="baseRate" class="form-control" value="<%= department.base_rate %>" step="0.01"/>
                     </label>
                     <label>
                         <span>Overtime Rate</span>
-                        <input type="number" name="overtime" class="form-control" value="<%= department.overtime_rate %>">
+                        <input type="number" name="overtime" class="form-control" value="<%= department.overtime_rate %>" step="0.01">
                     </label>
                     
                 </div>
