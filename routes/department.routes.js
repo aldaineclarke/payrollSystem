@@ -8,6 +8,7 @@ router.get("/add", departmentController.createDepartmentForm);
 router.post("/add", departmentController.createDepartment);
 router.get("/:id", departmentController.getDepartment);
 router.post("/:id", departmentController.updateDepartment);
+router.get("/delete/:id", departmentController.deleteDepartment);
 
 
 

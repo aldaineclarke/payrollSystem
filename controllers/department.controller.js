@@ -15,7 +15,7 @@ class DepartmentController{
     }
     createDepartment(req, res, next){
 
-        data = {
+        let data = {
             department: req.body.department,
             base_rate: req.body.baseRate,
             overtime_rate: req.body.overtime
@@ -29,7 +29,7 @@ class DepartmentController{
     }
     updateDepartment(req, res, next){
         let id = parseInt(req.params.id);
-        data = {
+        let data = {
             department: req.body.department,
             base_rate: req.body.baseRate,
             overtime_rate: req.body.overtime
@@ -40,7 +40,7 @@ class DepartmentController{
     }
     deleteDepartment(req, res, next){
         let id = parseInt(req.params.id);
-        db.query("DELETE departments WHERE id = ?",[id],(error, departments)=>{
+        db.query("DELETE FROM departments WHERE id = ?",[id],(error, departments)=>{
             res.redirect("/admin/departments");
         })
     }
