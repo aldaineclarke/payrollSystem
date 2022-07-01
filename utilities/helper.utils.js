@@ -39,15 +39,15 @@ function getDateRange(startDate, endDate){
  * @returns {Object<{startDate, endDate}>} Object which contains the end date as well as the start date
  */
  function findStartWeek(startDate){
-    startDate = new Date(startDate);
+     startDate = new Date(startDate);
     while(true){
-
-        if(startDate.getDay() == 0){
+        if(startDate.getDay() === 0){
             let endDate = new Date(startDate);
             endDate = new Date(endDate.setDate(endDate.getDate() + 7));
             return {startDate, endDate};
+        }else{
+            startDate = new Date(startDate.setDate(startDate.getDate() - 1));
         }
-        startDate = new Date(startDate.setDate(startDate.getDate() - 1));
     }
 
 }

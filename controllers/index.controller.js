@@ -48,23 +48,6 @@ class IndexController{
         })
 
     }
-    getTimecardForWeek(req, res, next){
-        let date = req.params.startRange;
-        
-        let {startDate, endDate} = findStartWeek(date);
-        startDate = parseDateToInputField(startDate);
-        endDate = parseDateToInputField(endDate);
-        console.log("startDate: ", startDate); 
-        console.log("endDate: ", endDate)
-        db.query("SELECT * FROM timecard where emp_id = ? AND loginTime BETWEEN ? AND ? ", [req.session.user.emp_id, startDate, endDate],(error, results, fields)=>{
-
-            console.log(results)
-
-            // if(error) throw error;
-            res.render("history", {timecard:results})
-        });
-        
-    }
     startEmployeeClock(req, res, next){
 
         let {startRange, endRange } = getDateRange();
