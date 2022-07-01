@@ -5,7 +5,7 @@
             <form action="/admin/timecards/" method="GET" class="d-flex gap-2 align-items-end">
                 <label>
                     <span class="fw-bold">Work Week: </span>
-                    <input type="date" name="startRange" value ="" class="form-control form-control-sm">
+                    <input type="date" name="startRange" value ="<%= startDate %>" class="form-control form-control-sm">
                 </label>
                 <label>
                   <span class="fw-bold">Employee: </span>
@@ -64,7 +64,7 @@
                       <button type="button" data-id="<%= record.id %>" class="btn btn-link btn-sm btn-rounded" onclick="getToEditPage(event)">
                         Edit
                       </button>
-                      <a href="/admin/approveHours/<%= record.id%>" type="button" class="btn btn-link btn-sm btn-rounded">
+                      <a href="/admin/timecards/approveHours/<%= record.id%>" type="button" class="btn btn-link btn-sm btn-rounded">
                         Approve Hours
                       </a>
                     </td>

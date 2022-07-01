@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const indexController = require('../controllers/index.controller');
+const timecardController = require('../controllers/timecard.controller');
 const { authGuard } = require('../middleware/auth.guard');
 
 router.get("/login",(req,res,next)=>{
@@ -10,11 +11,12 @@ router.get("/startClock",indexController.startEmployeeClock)
 router.get("/stopClock",indexController.stopEmployeeClock)
 router.get("/",indexController.getUserInfo);
 
+
 router.post("/authenticate",indexController.loginUser);
 
 router.get("/logout",indexController.logoutUser);
-router.get("/profile", authGuard,indexController.getEmployeeProfile);
-router.post("/profile", authGuard,indexController.updateEmployeeInfo);
+router.get("/profile",indexController.getEmployeeProfile);
+router.post("/profile", indexController.updateEmployeeInfo);
 
 
 module.exports = router;
