@@ -1,0 +1,77 @@
+<%- include('~header.ejs')%>
+    <section class="container">
+      <div class="row pt-2 pb-3">
+        <div class="col">
+            <form action="/admin/timecards/" method="GET" class="d-flex gap-2 align-items-end">
+                <label>
+                    <span class="fw-bold">Work Week: </span>
+                    <input type="date" name="startRange" value ="" class="form-control form-control-sm">
+                </label>
+                <label>
+                  <span class="fw-bold">Employee: </span>
+                  <select name="emp_id" class="form-select form-select-sm">
+                    <% employees.forEach((employee) => {%>
+
+                      <% if(employee.emp_id == activeId){%>
+                        <option value="<%= employee.emp_id %>" selected><%= employee.fname.concat(" ",employee.lname) %></option>
+                        <%}else{%>
+                          <option value="<%= employee.emp_id %>"><%= employee.fname.concat(" ",employee.lname) %></option>
+                        <%}%>
+                    <%})%>
+                  </select>
+              </label>
+              <button class="btn btn-primary btn-sm">Search Timecard</button>
+
+            </form>
+        </div>
+    </div>
+        <table class="table align-middle mb-0 bg-white">
+            <thead class="bg-light">
+              <tr>
+                <th>EmployeeID</th>
+                <th>Employee Name</th>
+                <th>Login Time</th>
+                <th>Logout Time</th>
+                <th>Hours Worked</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% records.forEach((record)=>{ %>
+                <tr>
+                    <td>
+                        <a href="employee/<%= record.emp_id %>" class="fw-normal"><%= record.emp_id %></a>
+                    </td>
+                    <td>
+                        <p class="fw-normal mb-1"><%= record.name %></p>
+                    </td>
+                    <td>
+                        <p class="fw-normal"><%= new Date(record.loginTime).toLocaleString().slice(11) %></p>
+                    </td>
+                    <td>
+                        <p class="fw-normal"><%= (record.logoutTime)?new Date(record.logoutTime).toLocaleString().slice(11) : "" %></p>
+                    </td>
+                    <td>
+                        <p class="fw-normal"><%= (record.logoutTime) ? (
+                            (new Date(record.logoutTime) - 
+                            new Date(record.loginTime) ) / 3600000).toFixed(2): "" %></p>
+                    </td>
+                    <td>
+                      <span class="badge badge-success rounded-pill d-inline"><%= record.status %></span>
+                    </td>
+                    <td>
+                      <button type="button" data-id="<%= record.id %>" class="btn btn-link btn-sm btn-rounded" onclick="getToEditPage(event)">
+                        Edit
+                      </button>
+                      <a href="/admin/approveHours/<%= record.id%>" type="button" class="btn btn-link btn-sm btn-rounded">
+                        Approve Hours
+                      </a>
+                    </td>
+                  </tr>
+              <% })%>
+
+            </tbody>
+          </table>
+    </section>
+<%- include('~footer.ejs')%>
