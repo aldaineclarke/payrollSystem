@@ -9,20 +9,33 @@ class PayrollController{
         });
     }
     async getAllPayroll(req, res, next){
+        console.log(req.query);
+        let dateRange = new Date();
+        let emp_id = "";
+        
+        if(Object.keys(req.query).length > 0){
+            if(req.query.startRange.length > 0){
+                dateRange = (isNaN(Date.parse(req.query.startRange))) ? new Date() : new Date(req.query.startRange); // checks to see if the date is valid..if it is then just return todays date, if not then convert range to string then return it.
+            }
 
-
+            emp_id = (req.query.emp_id) ? req.query.emp_id : "";
+            
+            
+        }
+        let {startDate, endDate} = findStartWeek(dateRange);
+        startDate = parseDateToInputField(startDate);
+        endDate = parseDateToInputField(endDate);
         try{
-            let {startDate, endDate} = findStartWeek(new Date());
-            startDate = parseDateToInputField(startDate);
+
             let employees = await new Promise((resolve, reject)=>{
                 db.query("SELECT * FROM employees" ,(error, employees)=>{
                     if(error) reject({code: error.code, message: error.sqlMessage});
                     resolve(employees);
                 })
             })
-            db.query("SELECT p.id, e.emp_id,e.fname, e.lname, p.total_hours, p.overtime_hours, p.net_salary,p.overtime_payment, p.date_paid FROM payrolls p JOIN employees e ON p.emp_id = e.emp_id WHERE p.date_paid BETWEEN ? AND ?", [startDate, endDate],(error, payrolls)=>{
+            db.query("SELECT p.id, e.emp_id,e.fname, e.lname, p.total_hours, p.overtime_hours, p.net_salary,p.overtime_payment, p.date_paid FROM payrolls p JOIN employees e ON p.emp_id = e.emp_id WHERE p.date_paid BETWEEN ? AND ? AND e.emp_id = ? ",[startDate, endDate, req.query.emp_id],(error, payrolls)=>{
                 if(error) console.log({code: error.code, message: error.sqlMessage});
-                console.log(payrolls.map((payroll)=> payroll.date_paid));
+                console.log(startDate)
                 res.render("viewPayrolls",{payrolls, employees, startDate })
             })
         }catch(error){

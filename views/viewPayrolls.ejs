@@ -2,12 +2,12 @@
     <section class="container">
       <div class="row my-3">
         <div class="col d-flex justify-content-end">
-            <a href="/admin/payrolls/generate/" class="btn btn-sm btn-info">Generate Payroll</a>
+            <a href="/admin/payrolls/generate/" class="btn btn-sm btn-success">Generate Payroll</a>
         </div>
       </div>
       <div class="row pt-2 pb-3">
         <div class="col">
-            <form action="/admin/timecards/" method="GET" class="d-flex gap-2 align-items-end">
+            <form action="/admin/payrolls/" method="GET" class="d-flex gap-2 align-items-end">
                 <label>
                     <span class="fw-bold">Work Week: </span>
                     <input type="date" name="startRange" value ="<%= startDate %>" class="form-control form-control-sm">
@@ -15,8 +15,8 @@
                 <label>
                   <span class="fw-bold">Employee: </span>
                   <select name="emp_id" class="form-select form-select-sm">
+                      <option value="">-- View All Payrolls --</option>
                     <% employees.forEach((employee) => {%>
-
                           <option value="<%= employee.emp_id %>"><%= employee.fname.concat(" ",employee.lname) %></option>
                     <%})%>
                   </select>
