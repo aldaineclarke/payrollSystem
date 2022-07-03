@@ -1,0 +1,84 @@
+<%- include('~header.ejs')%>
+    <section class="container">
+      <div class="row my-3">
+        <div class="col d-flex justify-content-end">
+            <a href="/admin/payrolls/generate/" class="btn btn-sm btn-info">Generate Payroll</a>
+        </div>
+      </div>
+      <div class="row pt-2 pb-3">
+        <div class="col">
+            <form action="/admin/timecards/" method="GET" class="d-flex gap-2 align-items-end">
+                <label>
+                    <span class="fw-bold">Work Week: </span>
+                    <input type="date" name="startRange" value ="<%= startDate %>" class="form-control form-control-sm">
+                </label>
+                <label>
+                  <span class="fw-bold">Employee: </span>
+                  <select name="emp_id" class="form-select form-select-sm">
+                    <% employees.forEach((employee) => {%>
+
+                          <option value="<%= employee.emp_id %>"><%= employee.fname.concat(" ",employee.lname) %></option>
+                    <%})%>
+                  </select>
+              </label>
+              <button class="btn btn-primary btn-sm">Search Payroll</button>
+
+            </form>
+        </div>
+    </div>
+        <table class="table align-middle mb-0 bg-white">
+            <thead class="bg-light">
+              <tr>
+                <th>EmployeeID</th>
+                <th>Employee Name</th>
+                <th>Total Hours</th>
+                <th>Overtime Hours</th>
+                <th>Net Salary</th>
+                <th>Overtime Payment</th>
+                <th>Total Salary</th>
+                <th>Pay Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% payrolls.forEach((payroll)=>{ %>
+                <tr>
+                    <td>
+                        <a href="/admin/employees/<%= payroll.emp_id%>" class="fw-normal"><%= payroll.emp_id %></a>
+                    </td>
+                    <td>
+                      <p class="fw-normal mb-1"><%= payroll.fname.concat(" ", payroll.lname) %></p>
+                  </td>
+                    <td>
+                        <p class="fw-normal mb-1"><%= payroll.total_hours %></p>
+                    </td>
+                    <td>
+                        <p class="fw-normal"><%= payroll.overtime_hours %></p>
+                    </td>
+                    <td>
+                        <p class="fw-normal">$ <%= payroll.net_salary %></p>
+                    </td>
+                    <td>
+                        <p class="fw-normal">$ <%= payroll.overtime_payment %></p>
+                    </td>
+                    <td>
+                        <p class="fw-normal">$ <%= payroll.overtime_payment + payroll.net_salary %></p>
+                    </td>
+                    <td>
+                      <span class="badge badge-success rounded-pill d-inline"><%= new Date(payroll.date_paid).toLocaleString().slice(0,10) %></span>
+                    </td>
+                    <td>
+                      <!-- <button type="button" data-id="<%= payroll.id %>" class="btn btn-link btn-sm btn-rounded" onclick="getToEditPage(event)">
+                        Edit
+                      </button> -->
+                      <a href="/admin/payroll/<%= payroll.id%>" type="button" class="btn btn-link btn-sm btn-rounded">
+                          Edit
+                      </a>
+                    </td>
+                  </tr>
+              <% })%>
+
+            </tbody>
+          </table>
+    </section>
+<%- include('~footer.ejs')%>
