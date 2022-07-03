@@ -1,8 +1,9 @@
 const router = require('express').Router();
 const payrollController = require('../controllers/payroll.controller');
+const { isAdmin } = require('../middleware/auth.guard');
 
-router.get("/", payrollController.getAllPayroll);
-router.get("/generate", payrollController.generateAllPayrolls);
+router.get("/",isAdmin,payrollController.getAllPayroll);
+router.get("/generate", isAdmin,payrollController.generateAllPayrolls);
 
 
 
